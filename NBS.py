@@ -23,7 +23,6 @@ objective_values = [-objective_function(x) for x in x1_range]
 u1 = [(50*math.log10(1+x)-100) for x in x1_range]
 u2 = [(100*math.log10(1+100000-x)-100) for x in x1_range]
 
-
 # Plot utility function for rich man
 plt.plot(x1_range, u1, label="Utility of Rich Man (U1)")
 plt.plot(100000-x1_range, u2, label="Utility of Poor Man (U2)"),
@@ -39,7 +38,7 @@ plt.scatter(optimal_u1, optimal_u2, color='red', label="NBS outcome")
 plt.xlabel('Utility of Rich Man (U1)')
 plt.ylabel('Utility of Poor Man (U2)')
 plt.title("Utility Functions and NBS Outcome")
-plt.text(optimal_u1-55, optimal_u2-15, s=f"U1* = {round(optimal_u1,2)}, and U2* = {round(optimal_u2,2)}", color='red', fontsize='medium', fontstyle='italic')
+plt.text(optimal_u1-90, optimal_u2-15, s=f"U1*={round(optimal_u1,2)} and U2*={round(optimal_u2,2)} with X1={optimal_x1} USD", 
+         color='red', fontsize='medium', fontstyle='italic')
 plt.legend()
 plt.show()
-
