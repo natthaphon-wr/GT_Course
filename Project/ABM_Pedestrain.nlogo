@@ -18,6 +18,7 @@ patches-own [
   num-left-remove
   N_total          ; the total number of agents that will affect the change of expected comfort utility
   Uec              ; expected comfort utility
+  Ues              ; expected society utility
   U_total          ; the sum of distance utility and expected comfort utility
   patch-target     ; the patch with max value of total utility
   Ud_lt            ; distance utility -for the agents moving to the left exit
@@ -163,13 +164,13 @@ end
 to find-a-patch-BNE ; turtle procedure
   ; a. for turtles moving to the left
   ifelse left? [
-    ask patch-left [ set U_total Ud_lt + Uec ]
+    ask patch-left [ set U_total Ud_lt + Uec + Ues]
     set patch-target max-one-of patch-left [ U_total ]
   ]
   ; elsecommands
   ; b. for turtles moving to the right
   [
-    ask patch-right [ set U_total Ud_rt + Uec ]
+    ask patch-right [ set U_total Ud_rt + Uec + Ues]
     set patch-target max-one-of patch-right [ U_total ]
   ]
   ifelse patch-target != nobody
@@ -224,6 +225,43 @@ to Expected-Uc ; patch procedure
     let P3 N_total * ( N_total - 1 ) * ( N_total - 2 ) / 6 * ( Pm ^ 3 ) * ( 1 - Pm ) ^ ( N_total - 3 )                    ; P3 - three turtles will move to patch (px,py)  in the next time step;
     let P4 N_total * ( N_total - 1 ) * ( N_total - 2 ) * ( N_total - 3 ) / 24 * ( Pm ^ 4 ) * ( 1 - Pm ) ^ ( N_total - 4 ) ; P4 -four turtles will enter the patch
     set Uec P0 + P1 + P2 + 0.51 * P3 + 0.07 * P4
+  ]
+end
+
+;; Expected society utility
+;; The calculattion expected value is same as Uec, but changing Us
+to Expected-Us ; patch procedure
+  let Pm Probability-competing / 100 ; Probablity of moving to the target
+  ask patches [
+    let px pxcor ; the coord of the patch
+    let py pycor
+    set num-here count turtles-here ; the number of turtles on this patch
+    set num-near count turtles-on neighbors ; the number of turtles on the neighbors
+
+    ;; remove the turtles who have no chance to move to this patch
+    ;; a. remove the turtles moving rightwards in patches (px+1, )
+    ask neighbors with [ pxcor = px + 1 ] [
+      set num-right-remove count turtles-here with [ ( 0 <= heading ) and ( heading < 180 ) ]
+    ]
+    ;; b. remove the turtle moving leftwards in patches (px-1, )
+    ask neighbors with [ pxcor = px - 1 ] [
+      set num-left-remove count turtles-here with [ ( 180 <= heading ) and ( heading < 360 ) ]
+    ]
+
+    ; the number of turtles that may move to patch (px, py) in the next time step.
+    set N_total num-here + num-near - num-right-remove - num-left-remove
+
+    ; Expected Society Utility = sum of (Society Utility * corresponding Probability )
+    ;let P0 (1 - Pm) ^ N_total
+    ;let P1 N_total * Pm * ((1 - Pm) ^ (N_total - 1))
+    let P2 N_total * (N_total - 1) / 2 * (Pm ^ 2) * ((1 - Pm) ^ ( N_total - 2))
+    let P3 N_total * (N_total - 1) * (N_total - 2) / 6 * (Pm ^ 3) * ((1 - Pm ) ^ (N_total - 3))
+    let P4 N_total * (N_total - 1) * (N_total - 2) * (N_total - 3) / 24 * (Pm ^ 4) * ((1 - Pm) ^ (N_total - 4))
+    let P5 N_total * (N_total - 1) * (N_total - 2) * (N_total - 3) * (N_total - 4) / 120 * (Pm ^ 5) * ((1 - Pm) ^ (N_total - 5))
+    let P6 N_total * (N_total - 1) * (N_total - 2) * (N_total - 3) * (N_total - 4) * (N_total - 5) / 720 * (Pm ^ 6) * ((1 - Pm) ^ (N_total - 6))
+    let P7 N_total * (N_total - 1) * (N_total - 2) * (N_total - 3) * (N_total - 4) * (N_total - 5) * (N_total - 6) / 5040 * (Pm ^ 7) * ((1 - Pm) ^ (N_total - 7))
+    ;let P8 N_total * (N_total - 1) * (N_total - 2) * (N_total - 3) * (N_total - 4) * (N_total - 5) * (N_total - 6) * (N_total - 7) / 40320 * (Pm ^ 8) * ((1 - Pm) ^ (N_total - 8))
+    set Ues P2 * 0.2 + (P3 + P4) * 0.5 + P5 + P6 + P7
   ]
 end
 
@@ -310,17 +348,18 @@ end
 
 ;; setup patches
 to setup-patches ; patch procedure
+  resize-world -10 10 -5 5 ; set size of world
   ask patches [ set pcolor grey + 3 ]
 
   ; setup the exits
-  ask patches with [ abs pxcor = max-pxcor and abs pycor <= ( door-width / 2 ) ]
+  ask patches with [ abs pxcor = max-pxcor and abs pycor <= ( door-width / 3 ) ]
     [ set pcolor red - 1 ]
 end
 
-;; export view every 20 ticks
+;; export view every 10 ticks
 to Export-Views
 ;  file-open user-new-file
-  if ticks mod 20 = 0 [
+  if ticks mod 10 = 0 [
     set view-number view-number + 1
     export-view (word moving-pattern "view" view-number ".png")
   ]
@@ -329,11 +368,11 @@ end
 GRAPHICS-WINDOW
 24
 11
-1412
-440
+452
+240
 -1
 -1
-20
+20.0
 1
 10
 1
@@ -343,21 +382,21 @@ GRAPHICS-WINDOW
 0
 0
 1
--34
-34
 -10
 10
+-5
+5
 1
 1
 1
 ticks
-30
+30.0
 
 BUTTON
-310
-451
-480
-484
+468
+15
+638
+48
 NIL
 setup
 NIL
@@ -371,10 +410,10 @@ NIL
 1
 
 BUTTON
-312
-488
-391
-521
+468
+54
+547
+87
 NIL
 go
 T
@@ -388,10 +427,10 @@ NIL
 1
 
 BUTTON
-399
-488
-480
-521
+554
+56
+635
+89
 goonce
 go
 NIL
@@ -405,139 +444,138 @@ NIL
 1
 
 SLIDER
-28
-448
-287
-481
+24
+246
+283
+279
 number-persons
 number-persons
 0
-3000
-3000
+500
+500.0
 1
 1
-NIL
+persons
 HORIZONTAL
 
 PLOT
-495
-451
-993
-653
+663
+10
+1161
+212
 Number of turtles in the tunnel
 Evacuation time
 Number of turtles
-0
-10
-0
-10
+0.0
+10.0
+0.0
+10.0
 true
 false
 "" ""
 PENS
-"default" 1 0 -16777216 true "" "plot count turtles"
+"default" 1.0 0 -16777216 true "" "plot count turtles"
 
 SLIDER
-28
-554
-155
-587
+23
+360
+150
+393
 door-width
 door-width
 1
-20
-6
+5
+4.0
 1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-28
-591
-155
-624
+23
+403
+150
+436
 Step-length
-step-length
+Step-length
 0
 1
-1
+0.7
 0.1
 1
-NIL
+m
 HORIZONTAL
 
 SLIDER
-162
-554
-287
-587
+163
+359
+288
+392
 move-speed
 move-speed
 0
 4
-2
+2.0
 0.1
 1
-NIL
+m/s
 HORIZONTAL
 
 SLIDER
-161
-591
-287
-624
+159
+404
+285
+437
 follow-radius
 follow-radius
 0
 5
-2
+3.0
 1
 1
 NIL
 HORIZONTAL
 
 PLOT
-1006
-450
-1406
-652
+664
+221
+1163
+447
 [Mean] Utilities of turtles in the tunnel
-Utility value
 Evacuation time
-0
-10
-0
-10
+Total Utility 
+0.0
+10.0
+0.0
+3.0
 true
-true
+false
 "" "ask turtles [ if pcolor = red + 1 [ pen-down ] ]"
 PENS
-"Mean U_sum" 1 0 -8630108 true "" "plot mean [U_total] of patches"
-"Mean Uec" 1 0 -7500403 true "" "plot mean [Uec] of patches"
+"Mean U_sum" 1.0 0 -16777216 true "" "plot mean [U_total] of patches"
 
 SLIDER
-28
-483
-287
-516
+25
+281
+284
+314
 Percentage-of-agents-with-BNE
-percentage-of-agents-with-bne
+Percentage-of-agents-with-BNE
 0
 100
-100
+61.1
 0.1
 1
 %
 HORIZONTAL
 
 SLIDER
-28
-518
-287
-551
+23
+317
+282
+350
 Probability-competing
-probability-competing
+Probability-competing
 0
 100
 16.7
@@ -547,29 +585,30 @@ probability-competing
 HORIZONTAL
 
 CHOOSER
-312
-526
-482
-571
+299
+254
+469
+299
 moving-pattern
 moving-pattern
 "BNE (mixed with RF)" "BNE (mixed with SR)" "Random follow" "Shortest route"
 0
 
 SLIDER
-312
-575
-482
-608
+298
+307
+470
+340
 weight-Ud
-weight-ud
+weight-Ud
 0
-2
-1.2
+1
+1.0
 0.01
 1
 NIL
 HORIZONTAL
+
 @#$#@#$#@
 ## WHAT IS IT?
 
@@ -919,15 +958,15 @@ NetLogo 6.2.2
 @#$#@#$#@
 @#$#@#$#@
 default
-0
--0.2 0 0 1
-0 1 1 0
-0.2 0 0 1
+0.0
+-0.2 0 0.0 1.0
+0.0 1 1.0 0.0
+0.2 0 0.0 1.0
 link direction
 true
 0
 Line -7500403 true 150 150 90 180
 Line -7500403 true 150 150 210 180
 @#$#@#$#@
-
+0
 @#$#@#$#@
