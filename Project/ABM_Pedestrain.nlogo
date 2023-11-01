@@ -28,6 +28,7 @@ patches-own [
 to setup
   ca
   if number-persons = 0 [ user-message " Please set a valid value using the slider 'number-persons' " stop ]
+  if weight-Ud + weight-Uec + weight-Ues != 1 [ user-message " Please set a valid weight for summation equal 1 " stop ]
   setup-patches     ; sets the values and colors of the patches
   setup-turtles     ; sets the shapes and colors of the turtles
   Distance-Utility  ; sets the distance utility of each patch
@@ -37,7 +38,7 @@ end
 
 to go
   if not any? turtles [ print ( word moving-pattern ": " ticks ) stop ]
-;  Export-Views ;; export the model views every 20 ticks
+  ;Export-Views ;; export the model views
 
   ; Select a moving mode through the chooser "moving-pattern"
   ; a. "BNE (mixed with RF)" - a percentage of turtles will use BNE utility to decide their moving route, and the rest will randomly choose a turtle in view to follow.
@@ -164,13 +165,13 @@ end
 to find-a-patch-BNE ; turtle procedure
   ; a. for turtles moving to the left
   ifelse left? [
-    ask patch-left [ set U_total Ud_lt + Uec + Ues]
+    ask patch-left [ set U_total (Ud_lt * weight-Ud) + (Uec * weight-Uec) + (Ues * weight-Ues)]
     set patch-target max-one-of patch-left [ U_total ]
   ]
   ; elsecommands
   ; b. for turtles moving to the right
   [
-    ask patch-right [ set U_total Ud_rt + Uec + Ues]
+    ask patch-right [ set U_total (Ud_lt * weight-Ud) + (Uec * weight-Uec) + (Ues * weight-Ues)]
     set patch-target max-one-of patch-right [ U_total ]
   ]
   ifelse patch-target != nobody
@@ -185,8 +186,8 @@ to Distance-Utility ; patch procedure
     let DL [ distancexy max-pxcor max-pycor ] of patch min-pxcor min-pycor ; the length of the diagonal
     let D_lt distancexy min-pxcor 0                                        ; the distance to the left exit
     let D_rt distancexy max-pxcor 0                                        ; the distance to the right exit
-    set Ud_lt ( 1 - ( D_lt / DL ) ) * weight-Ud                            ; when turtles moving to the left
-    set Ud_rt ( 1 - ( D_rt / DL ) ) * weight-Ud                            ; when turtles moving to the right
+    set Ud_lt ( 1 - ( D_lt / DL ) )                         ; when turtles moving to the left
+    set Ud_rt ( 1 - ( D_rt / DL ) )                          ; when turtles moving to the right
   ]
 end
 
@@ -358,10 +359,10 @@ end
 
 ;; export view every 10 ticks
 to Export-Views
-;  file-open user-new-file
+  file-open "D:/GitRepo/GT_Course/Project/img/"
   if ticks mod 10 = 0 [
     set view-number view-number + 1
-    export-view (word moving-pattern "view" view-number ".png")
+    export-view (word "/img/" moving-pattern "_tricks" ticks ".png")
   ]
 end
 @#$#@#$#@
@@ -515,7 +516,7 @@ move-speed
 move-speed
 0
 4
-2.0
+2.2
 0.1
 1
 m/s
@@ -530,7 +531,7 @@ follow-radius
 follow-radius
 0
 5
-3.0
+4.0
 1
 1
 NIL
@@ -547,7 +548,7 @@ Total Utility
 0.0
 10.0
 0.0
-3.0
+1.0
 true
 false
 "" "ask turtles [ if pcolor = red + 1 [ pen-down ] ]"
@@ -563,7 +564,7 @@ Percentage-of-agents-with-BNE
 Percentage-of-agents-with-BNE
 0
 100
-61.1
+38.5
 0.1
 1
 %
@@ -578,7 +579,7 @@ Probability-competing
 Probability-competing
 0
 100
-16.7
+16.8
 0.1
 1
 %
@@ -592,7 +593,7 @@ CHOOSER
 moving-pattern
 moving-pattern
 "BNE (mixed with RF)" "BNE (mixed with SR)" "Random follow" "Shortest route"
-0
+1
 
 SLIDER
 298
@@ -603,7 +604,37 @@ weight-Ud
 weight-Ud
 0
 1
-1.0
+0.5
+0.01
+1
+NIL
+HORIZONTAL
+
+SLIDER
+298
+350
+470
+383
+weight-Uec
+weight-Uec
+0
+1
+0.25
+0.01
+1
+NIL
+HORIZONTAL
+
+SLIDER
+298
+395
+470
+428
+weight-Ues
+weight-Ues
+0
+1
+0.25
 0.01
 1
 NIL
