@@ -44,24 +44,28 @@ to go
   ; a. "BNE (mixed with RF)" - a percentage of turtles will use BNE utility to decide their moving route, and the rest will randomly choose a turtle in view to follow.
   if moving-pattern = "BNE (mixed with RF)" [
     Expected-Uc ; let each patch calculate their expected comfort utiliy
+    Expected-Us ; let each patch calculate their expected social utiliy
     BNE-mix-RF
   ]
 
   ; b. "BNE (mixed with SR)" - a percentage of turtles use BNE to evacuate, and the rest will directly move to the exit.
   if moving-pattern = "BNE (mixed with SR)" [
     Expected-Uc
+    Expected-Us
     BNE-mix-SR
   ]
 
   ; c. "Random follow" - All turtles will randomly choose an agent in view to follow during the simulation.
   if moving-pattern = "Random follow" [
     Expected-Uc
+    Expected-Us
     ask turtles [ Random-follow ]
   ]
 
   ; d. "Shortest route" - All turtles will move directly to the exit.
   if moving-pattern = "Shortest route" [
     Expected-Uc
+    Expected-Us
     ask turtles [ Shortest-Route ]
   ]
 
@@ -171,7 +175,7 @@ to find-a-patch-BNE ; turtle procedure
   ; elsecommands
   ; b. for turtles moving to the right
   [
-    ask patch-right [ set U_total (Ud_lt * weight-Ud) + (Uec * weight-Uec) + (Ues * weight-Ues)]
+    ask patch-right [ set U_total (Ud_rt * weight-Ud) + (Uec * weight-Uec) + (Ues * weight-Ues)]
     set patch-target max-one-of patch-right [ U_total ]
   ]
   ifelse patch-target != nobody
@@ -564,7 +568,7 @@ Percentage-of-agents-with-BNE
 Percentage-of-agents-with-BNE
 0
 100
-38.5
+100.0
 0.1
 1
 %
@@ -604,7 +608,7 @@ weight-Ud
 weight-Ud
 0
 1
-0.5
+1.0
 0.01
 1
 NIL
@@ -619,7 +623,7 @@ weight-Uec
 weight-Uec
 0
 1
-0.25
+0.0
 0.01
 1
 NIL
@@ -634,7 +638,7 @@ weight-Ues
 weight-Ues
 0
 1
-0.25
+0.0
 0.01
 1
 NIL
