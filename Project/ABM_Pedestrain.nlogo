@@ -364,7 +364,7 @@ end
 ;; export view every 10 ticks
 to Export-Views
   file-open "D:/GitRepo/GT_Course/Project/img/"
-  if ticks mod 10 = 0 [
+  if ticks mod 5 = 0 [
     set view-number view-number + 1
     export-view (word "/img/" moving-pattern "_tricks" ticks ".png")
   ]
@@ -568,7 +568,7 @@ Percentage-of-agents-with-BNE
 Percentage-of-agents-with-BNE
 0
 100
-100.0
+60.0
 0.1
 1
 %
@@ -597,7 +597,7 @@ CHOOSER
 moving-pattern
 moving-pattern
 "BNE (mixed with RF)" "BNE (mixed with SR)" "Random follow" "Shortest route"
-1
+0
 
 SLIDER
 298
@@ -608,7 +608,7 @@ weight-Ud
 weight-Ud
 0
 1
-1.0
+0.3
 0.01
 1
 NIL
@@ -623,7 +623,7 @@ weight-Uec
 weight-Uec
 0
 1
-0.0
+0.5
 0.01
 1
 NIL
@@ -638,7 +638,7 @@ weight-Ues
 weight-Ues
 0
 1
-0.0
+0.2
 0.01
 1
 NIL
@@ -990,6 +990,123 @@ NetLogo 6.2.2
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
+<experiments>
+  <experiment name="mix_BNE_SR" repetitions="10" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <metric>ticks</metric>
+    <enumeratedValueSet variable="Probability-competing">
+      <value value="16.8"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="follow-radius">
+      <value value="4"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="weight-Uec">
+      <value value="0.5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="weight-Ud">
+      <value value="0.3"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="moving-pattern">
+      <value value="&quot;BNE (mixed with SR)&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="weight-Ues">
+      <value value="0.2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="move-speed">
+      <value value="2.2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="number-persons">
+      <value value="100"/>
+      <value value="200"/>
+      <value value="300"/>
+      <value value="400"/>
+      <value value="500"/>
+    </enumeratedValueSet>
+    <steppedValueSet variable="Percentage-of-agents-with-BNE" first="91" step="1" last="100"/>
+    <enumeratedValueSet variable="door-width">
+      <value value="4"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="Step-length">
+      <value value="0.7"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="mix_BNE_RF" repetitions="5" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <enumeratedValueSet variable="Probability-competing">
+      <value value="16.8"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="follow-radius">
+      <value value="4"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="weight-Uec">
+      <value value="0.5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="weight-Ud">
+      <value value="0.3"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="moving-pattern">
+      <value value="&quot;BNE (mixed with RF)&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="weight-Ues">
+      <value value="0.2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="move-speed">
+      <value value="2.2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="number-persons">
+      <value value="100"/>
+      <value value="200"/>
+      <value value="300"/>
+      <value value="400"/>
+      <value value="500"/>
+    </enumeratedValueSet>
+    <steppedValueSet variable="Percentage-of-agents-with-BNE" first="0" step="1" last="10"/>
+    <enumeratedValueSet variable="door-width">
+      <value value="4"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="Step-length">
+      <value value="0.7"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="mix_BNE_RF2" repetitions="10" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <timeLimit steps="100"/>
+    <enumeratedValueSet variable="Probability-competing">
+      <value value="16.8"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="follow-radius">
+      <value value="4"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="weight-Uec">
+      <value value="0.5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="weight-Ud">
+      <value value="0.3"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="moving-pattern">
+      <value value="&quot;BNE (mixed with RF)&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="weight-Ues">
+      <value value="0.2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="move-speed">
+      <value value="2.2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="number-persons">
+      <value value="500"/>
+    </enumeratedValueSet>
+    <steppedValueSet variable="Percentage-of-agents-with-BNE" first="51" step="1" last="60"/>
+    <enumeratedValueSet variable="door-width">
+      <value value="4"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="Step-length">
+      <value value="0.7"/>
+    </enumeratedValueSet>
+  </experiment>
+</experiments>
 @#$#@#$#@
 @#$#@#$#@
 default
