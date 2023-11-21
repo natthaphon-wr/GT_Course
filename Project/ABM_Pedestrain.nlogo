@@ -568,7 +568,7 @@ Percentage-of-agents-with-BNE
 Percentage-of-agents-with-BNE
 0
 100
-60.0
+100.0
 0.1
 1
 %
@@ -597,7 +597,7 @@ CHOOSER
 moving-pattern
 moving-pattern
 "BNE (mixed with RF)" "BNE (mixed with SR)" "Random follow" "Shortest route"
-0
+1
 
 SLIDER
 298
@@ -1099,6 +1099,121 @@ NetLogo 6.2.2
       <value value="500"/>
     </enumeratedValueSet>
     <steppedValueSet variable="Percentage-of-agents-with-BNE" first="51" step="1" last="60"/>
+    <enumeratedValueSet variable="door-width">
+      <value value="4"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="Step-length">
+      <value value="0.7"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="RF" repetitions="20" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <timeLimit steps="100"/>
+    <enumeratedValueSet variable="Probability-competing">
+      <value value="16.8"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="follow-radius">
+      <value value="4"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="weight-Ud">
+      <value value="0.3"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="weight-Uec">
+      <value value="0.5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="weight-Ues">
+      <value value="0.2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="move-speed">
+      <value value="2.2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="moving-pattern">
+      <value value="&quot;BNE (mixed with RF)&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="number-persons">
+      <value value="500"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="Percentage-of-agents-with-BNE">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="door-width">
+      <value value="4"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="Step-length">
+      <value value="0.7"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="experiment" repetitions="1" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <metric>count turtles</metric>
+    <enumeratedValueSet variable="Probability-competing">
+      <value value="16.8"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="follow-radius">
+      <value value="4"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="weight-Ud">
+      <value value="0.3"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="weight-Uec">
+      <value value="0.5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="weight-Ues">
+      <value value="0.2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="move-speed">
+      <value value="2.2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="moving-pattern">
+      <value value="&quot;BNE (mixed with RF)&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="number-persons">
+      <value value="500"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="Percentage-of-agents-with-BNE">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="door-width">
+      <value value="4"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="Step-length">
+      <value value="0.7"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="BNE" repetitions="20" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <timeLimit steps="100"/>
+    <metric>count turtles</metric>
+    <enumeratedValueSet variable="Probability-competing">
+      <value value="16.8"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="follow-radius">
+      <value value="4"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="weight-Ud">
+      <value value="0.3"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="weight-Uec">
+      <value value="0.5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="weight-Ues">
+      <value value="0.2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="move-speed">
+      <value value="2.2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="moving-pattern">
+      <value value="&quot;BNE (mixed with SR)&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="number-persons">
+      <value value="500"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="Percentage-of-agents-with-BNE">
+      <value value="100"/>
+    </enumeratedValueSet>
     <enumeratedValueSet variable="door-width">
       <value value="4"/>
     </enumeratedValueSet>
